@@ -47,3 +47,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
+const path = require('path');
+
+// ... သင့်ရဲ့ အခြား middleware များ (express.json, cors စသည်) ...
+
+// Root URL (/) ကို ဝင်လာရင် index.html ကို ပြပေးရန်
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
