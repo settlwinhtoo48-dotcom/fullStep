@@ -1,6 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
+const path = require('path'); // path module ကို အပေါ်ဆုံးတွင် ထည့်သွင်းထားပါသည်
 require('dotenv').config();
 
 const app = express();
@@ -11,6 +12,11 @@ app.use(express.json());
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
+});
+
+// Root URL (/) ကို ဝင်လာရင် index.html ကို ပြပေးရန်
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // HTML Form ကနေ ဒေတာလက်ခံမယ့် API Route
@@ -47,11 +53,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
-const path = require('path');
-
-// ... သင့်ရဲ့ အခြား middleware များ (express.json, cors စသည်) ...
-
-// Root URL (/) ကို ဝင်လာရင် index.html ကို ပြပေးရန်
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
