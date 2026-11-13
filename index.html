@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Form</title>
+</head>
+<body>
+    <h2>အကောင့်အသစ် ဖွင့်ရန်</h2>
+    <form id="registerForm">
+        <label>နာမည်:</label><br>
+        <input type="text" id="name" required><br><br>
+
+        <label>အီးမေးလ်:</label><br>
+        <input type="email" id="email" required><br><br>
+
+        <label>စကားဝှက်:</label><br>
+        <input type="password" id="password" required><br><br>
+
+        <button type="submit">အကောင့်လုပ်ရန်</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Localမှာ စမ်းမယ်ဆိုရင် http://localhost:3000 သုံးပါမယ်။ 
+                // အွန်လိုင်းတင်ရင် Render ရဲ့ Live URL နဲ့ ပြောင်းရပါမယ်။
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('message').innerText = 'အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ!';
+                    document.getElementById('registerForm').reset();
+                } else {
+                    document.getElementById('message').innerText = 'အမှားအယွင်းရှိသည်: ' + data.error;
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('message').innerText = 'ဆာဗာသို့ ချိတ်ဆက်၍ မရပါ။';
+            }
+        });
+    </script>
+</body>
+</html>
